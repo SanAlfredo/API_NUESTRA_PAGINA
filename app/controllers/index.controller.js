@@ -1,5 +1,5 @@
 import { conn } from "../models/conexion.model.js";
-//import "../models/index.model.js";
+import "../models/index.model.js";
 
 export const ping = (req, res) => {
   if (conn) {
