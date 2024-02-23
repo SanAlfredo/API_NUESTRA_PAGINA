@@ -8,8 +8,13 @@ const Person = conn.define("people", {
     primaryKey: true,
     autoIncrement: true,
   },
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
   name: {
     type: DataTypes.STRING(150),
+    allowNull:false
   },
   cellphone: {
     type: DataTypes.STRING(200),

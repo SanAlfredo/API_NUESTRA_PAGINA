@@ -37,7 +37,7 @@ export const create = (req, res) => {
       data
         ? User.create(userInsert)
             .then((data) => {
-              res.send(data);
+              res.send({ message: "usuario creado", data: data });
             })
             .catch((error) => {
               res.status(500).send({
@@ -58,7 +58,7 @@ export const list = (req, res) => {
   User.findAll()
     .then((data) =>
       data
-        ? res.send(data)
+        ? res.send({ message: "lista de usuarios", data: data })
         : res.send({
             message: "no hay datos",
           })
@@ -74,7 +74,9 @@ export const detail = (req, res) => {
   console.log("detalle de Usuario ", req.params);
   User.findByPk(req.params.id)
     .then((data) =>
-      data ? res.send(data) : res.send({ message: "no hay datos" })
+      data
+        ? res.send({ message: "usuario encontrado", data: data })
+        : res.send({ message: "no hay datos" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -119,7 +121,7 @@ export const update = (req, res) => {
             .then((data) =>
               data
                 ? User.update(userInsert, { where: { id: req.params.id } })
-                    .then(res.send("actualizado con exito"))
+                    .then(res.send({ message: "actualizado con exito" }))
                     .catch((error) => {
                       res.status(500).send({
                         message: error.message,
@@ -148,7 +150,7 @@ export const borrar = (req, res) => {
     .then((data) =>
       data
         ? User.destroy({ where: { id: req.params.id } })
-            .then(res.send("eliminado con exito"))
+            .then(res.send({ message: "eliminado con exito" }))
             .catch((error) => {
               res.status(500).send({
                 message: error.message,

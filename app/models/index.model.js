@@ -10,16 +10,16 @@ Person.hasOne(User, {
 User.belongsTo(Person);
 //usuario tiene muchos roles a traves de la tabla user_role
 User.belongsToMany(Role, {
-  through: "user_role",
+  through: "user_roles",
   foreignKey: {
-    name: "user_id",
+    name: "userId",
   },
 });
 Role.belongsToMany(User, {
-  through: "user_role",
+  through: "user_roles",
   foreignKey: {
-    name: "role_id",
+    name: "roleId",
   },
 });
 
-export { Person, User, Role };
+export { Person, User, Role, UserRole };

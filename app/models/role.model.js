@@ -9,8 +9,13 @@ const Role = conn.define("roles", {
     primaryKey: true,
     autoIncrement: true,
   },
-  role: {
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  rol: {
     type: DataTypes.STRING(15),
+    allowNull:false
   },
 });
 

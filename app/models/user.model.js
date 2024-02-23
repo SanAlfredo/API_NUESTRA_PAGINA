@@ -8,6 +8,10 @@ const User = conn.define("users", {
     primaryKey: true,
     autoIncrement: true,
   },
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
   user: {
     type: DataTypes.STRING(50),
     allowNull:false,
@@ -15,7 +19,12 @@ const User = conn.define("users", {
   },
   password: {
     type: DataTypes.STRING,
+    allowNull:false
   },
+  personId:{
+    type: DataTypes.INTEGER,
+    allowNull:false
+  }
 });
 
 export default User;

@@ -21,8 +21,8 @@ export const create = (req, res) => {
     return;
   }
   const roles = {
-    user_id: usuario,
-    role_id: rol,
+    userId: usuario,
+    roleId: rol,
   };
   User.findByPk(usuario)
     .then((data) =>
@@ -31,7 +31,7 @@ export const create = (req, res) => {
             data
               ? UserRole.create(roles)
                   .then((data) => {
-                    res.send(data);
+                    res.send({ message: "creado con exito", data: data });
                   })
                   .catch((error) => {
                     res.status(500).send({
@@ -51,10 +51,14 @@ export const create = (req, res) => {
 //devuelve la lista de roles users
 export const list = (req, res) => {
   console.log("list method called", req.body);
-  UserRole.findAll()
+  UserRole.findAll(
+  //   {include:[
+  //   {model: Role}
+  // ]}
+  )
     .then((data) =>
       data
-        ? res.send(data)
+        ? res.send({ message: "lista de usuarios y roles", data: data })
         : res.send({
             message: "no hay datos",
           })
@@ -70,7 +74,7 @@ export const detail = (req, res) => {
   console.log("detalle de Usuarios y Roles ", req.params);
   UserRole.findByPk(req.params.id)
     .then((data) =>
-      data ? res.send(data) : res.send({ message: "no hay datos" })
+      data ? res.send({data:data}) : res.send({ message: "no hay datos" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -97,8 +101,8 @@ export const update = (req, res) => {
     return;
   }
   const roles = {
-    user_id: usuario,
-    role_id: rol,
+    userId: usuario,
+    roleId: rol,
   };
   User.findByPk(usuario)
     .then((data) =>
@@ -106,22 +110,22 @@ export const update = (req, res) => {
         ? Role.findByPk(rol).then((data) =>
             data
               ? UserRole.findByPk(req.params.id)
-              .then((data) =>
-                data
-                  ? UserRole.update(roles, { where: { id: req.params.id } })
-                      .then(res.send("actualizado con exito"))
-                      .catch((error) => {
-                        res.status(500).send({
-                          message: error.message,
-                        });
-                      })
-                  : res.send({ message: "no existe ese Rol con user" })
-              )
-              .catch((error) => {
-                res.status(500).send({
-                  message: error.message,
-                });
-              })
+                  .then((data) =>
+                    data
+                      ? UserRole.update(roles, { where: { id: req.params.id } })
+                          .then(res.send("actualizado con exito"))
+                          .catch((error) => {
+                            res.status(500).send({
+                              message: error.message,
+                            });
+                          })
+                      : res.send({ message: "no existe ese Rol con user" })
+                  )
+                  .catch((error) => {
+                    res.status(500).send({
+                      message: error.message,
+                    });
+                  })
               : res.send({ message: "no existe el rol" })
           )
         : res.send({ message: "no existe el usuario" })
@@ -131,8 +135,6 @@ export const update = (req, res) => {
         message: error.message,
       });
     });
-
-  
 };
 
 //borrar un rol user

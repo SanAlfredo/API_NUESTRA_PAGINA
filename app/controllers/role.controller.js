@@ -13,11 +13,11 @@ export const create = (req, res) => {
     return;
   }
   const roles = {
-    role: rol,
+    rol: rol,
   };
   Role.create(roles)
     .then((data) => {
-      res.send(data);
+      res.send({ message: "rol creado con exito", data: data });
     })
     .catch((error) => {
       res.status(500).send({
@@ -31,7 +31,7 @@ export const list = (req, res) => {
   Role.findAll()
     .then((data) =>
       data
-        ? res.send(data)
+        ? res.send({ message: "listado de roles encontrados", data: data })
         : res.send({
             message: "no hay datos",
           })
@@ -47,7 +47,9 @@ export const detail = (req, res) => {
   console.log("detalle de Role ", req.params);
   Role.findByPk(req.params.id)
     .then((data) =>
-      data ? res.send(data) : res.send({ message: "no hay datos" })
+      data
+        ? res.send({ message: "rol encontrado", data: data })
+        : res.send({ message: "no hay datos" })
     )
     .catch((error) => {
       res.status(500).send({
@@ -75,7 +77,7 @@ export const update = (req, res) => {
     .then((data) =>
       data
         ? Role.update(roles, { where: { id: req.params.id } })
-            .then(res.send("actualizado con exito"))
+            .then(res.send({ message: "actualizado con exito" }))
             .catch((error) => {
               res.status(500).send({
                 message: error.message,
@@ -97,7 +99,7 @@ export const borrar = (req, res) => {
     .then((data) =>
       data
         ? Role.destroy({ where: { id: req.params.id } })
-            .then(res.send("eliminado con exito"))
+            .then(res.send({ message: "eliminado con exito" }))
             .catch((error) => {
               res.status(500).send({
                 message: error.message,
