@@ -25,6 +25,21 @@ const User = conn.define("users", {
     type: DataTypes.INTEGER,
     allowNull:false
   }
+},
+{
+  hooks: {
+    afterCreate: (record) => {
+      delete record.dataValues.id;
+      delete record.dataValues.password;
+      delete record.dataValues.createdAt;
+      delete record.dataValues.updatedAt;
+    },
+    afterUpdate: (record) => {
+      delete record.dataValues.id;
+      delete record.dataValues.createdAt;
+      delete record.dataValues.updatedAt;
+    },
+  },
 });
 
 export default User;

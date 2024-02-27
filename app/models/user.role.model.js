@@ -20,6 +20,20 @@ const UserRole = conn.define("user_roles", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+},
+{
+  hooks: {
+    afterCreate: (record) => {
+      delete record.dataValues.id;
+      delete record.dataValues.createdAt;
+      delete record.dataValues.updatedAt;
+    },
+    afterUpdate: (record) => {
+      delete record.dataValues.id;
+      delete record.dataValues.createdAt;
+      delete record.dataValues.updatedAt;
+    },
+  },
 });
 
 export default UserRole;

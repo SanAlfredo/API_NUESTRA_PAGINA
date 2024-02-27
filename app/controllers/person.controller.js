@@ -45,7 +45,9 @@ export const create = (req, res) => {
 //devuelve la lista de personas
 export const list = (req, res) => {
   console.log("list method called", req.body);
-  Person.findAll()
+  Person.findAll({
+    attributes:["uuid","name","cellphone","email"]
+  })
     .then((data) =>
       data
         ? res.send({

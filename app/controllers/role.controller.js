@@ -70,7 +70,7 @@ export const update = (req, res) => {
     return;
   }
   const roles = {
-    role: rol,
+    rol: rol,
   };
 
   Role.findByPk(req.params.id)
@@ -83,7 +83,7 @@ export const update = (req, res) => {
                 message: error.message,
               });
             })
-        : res.send({ message: "no existe ese role" })
+        : res.send({ message: "no existe ese rol" })
     )
     .catch((error) => {
       res.status(500).send({
