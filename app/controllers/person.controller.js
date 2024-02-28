@@ -1,6 +1,9 @@
 import Person from "../models/person.model.js";
 import { Op } from "sequelize";
 
+//resultados esperados
+const resultados = ["uuid", "name", "cellphone", "email"];
+
 //metodo para crear una persona
 export const create = (req, res) => {
   console.log("create Person", req.body);
@@ -45,14 +48,14 @@ export const create = (req, res) => {
 //devuelve la lista de personas
 export const list = (req, res) => {
   console.log("list method called", req.body);
-  Person.findAll({
-    attributes:["uuid","name","cellphone","email"]
+  Person.findAndCountAll({
+    attributes: resultados,
   })
     .then((data) =>
       data
         ? res.send({
-            message: "lista de personas",
-            data: data,
+            message: `personas encontradas`,
+            data: { cantidad: data.count, elementos: data.rows },
           })
         : res.send({
             message: "no hay datos",
@@ -67,10 +70,16 @@ export const list = (req, res) => {
 //devuelve una sola persona
 export const detail = (req, res) => {
   console.log("detalle de Persona ", req.params);
-  Person.findByPk(req.params.id)
+  Person.findAndCountAll({
+    where: { uuid: req.params.id },
+    attributes: resultados,
+  })
     .then((data) =>
       data
-        ? res.send({ message: "persona encontrada", data: data })
+        ? res.send({
+            message: "persona encontrada",
+            data: { cantidad: data.count, elementos: data.rows },
+          })
         : res.send({ message: "no hay datos" })
     )
     .catch((error) => {
@@ -109,10 +118,10 @@ export const update = (req, res) => {
     email: email,
   };
 
-  Person.findByPk(req.params.id)
+  Person.findAll({ where: { uuid: req.params.id } })
     .then((data) =>
       data
-        ? Person.update(person, { where: { id: req.params.id } })
+        ? Person.update(person, { where: { uuid: req.params.id } })
             .then(res.send({ message: "actualizado con exito" }))
             .catch((error) => {
               res.status(500).send({
@@ -131,10 +140,10 @@ export const update = (req, res) => {
 //borrar una persona
 export const borrar = (req, res) => {
   console.log("borrando persona", req.params);
-  Person.findByPk(req.params.id)
+  Person.findAll({ where: { uuid: req.params.id } })
     .then((data) =>
       data
-        ? Person.destroy({ where: { id: req.params.id } })
+        ? Person.destroy({ where: { uuid: req.params.id } })
             .then(res.send({ message: "eliminado con exito" }))
             .catch((error) => {
               res.status(500).send({
@@ -153,10 +162,16 @@ export const borrar = (req, res) => {
 //buscar por nombre
 export const buscarNombre = (req, res) => {
   console.log("busqueda por nombre", req.params);
-  Person.findAll({ where: {name:{ [Op.like]: `%${req.params.nombre}%`}} })
+  Person.findAndCountAll({
+    where: { name: { [Op.like]: `%${req.params.nombre}%` } },
+    attributes: resultados,
+  })
     .then((data) =>
       data
-        ? res.send({ message: "personas encontradas", data: data })
+        ? res.send({
+            message: "personas encontradas",
+            data: { cantidad: data.count, elementos: data.rows },
+          })
         : res.send({ message: "no hay resultados" })
     )
     .catch((error) => {
@@ -165,12 +180,18 @@ export const buscarNombre = (req, res) => {
 };
 
 //buscar por celular
-export const buscarCelular =(req, res) => {
+export const buscarCelular = (req, res) => {
   console.log("busqueda por celular", req.params);
-  Person.findAll({ where: {cellphone:{ [Op.like]: `%${req.params.celular}%`}} })
+  Person.findAndCountAll({
+    where: { cellphone: { [Op.like]: `%${req.params.celular}%` } },
+    attributes: resultados,
+  })
     .then((data) =>
       data
-        ? res.send({ message: "personas encontradas", data: data })
+        ? res.send({
+            message: "personas encontradas",
+            data: { cantidad: data.count, elementos: data.rows },
+          })
         : res.send({ message: "no hay resultados" })
     )
     .catch((error) => {
@@ -179,12 +200,18 @@ export const buscarCelular =(req, res) => {
 };
 
 //buscar por correo
-export const buscarCorreo =(req, res) => {
+export const buscarCorreo = (req, res) => {
   console.log("busqueda por correo", req.params);
-  Person.findAll({ where: {email:{ [Op.like]: `%${req.params.email}%`}} })
+  Person.findAndCountAll({
+    where: { email: { [Op.like]: `%${req.params.email}%` } },
+    attributes: resultados,
+  })
     .then((data) =>
       data
-        ? res.send({ message: "personas encontradas", data: data })
+        ? res.send({
+            message: "personas encontradas",
+            data: { cantidad: data.count, elementos: data.rows },
+          })
         : res.send({ message: "no hay resultados" })
     )
     .catch((error) => {

@@ -1,5 +1,8 @@
 import Role from "../models/role.model.js";
 
+//datos para el resultado
+const resultado_rol = ["uuid", "rol"];
+
 //metodo para crear un role
 export const create = (req, res) => {
   console.log("create Role", req.body);
@@ -28,10 +31,13 @@ export const create = (req, res) => {
 //devuelve la lista de roles
 export const list = (req, res) => {
   console.log("list method called", req.body);
-  Role.findAll()
+  Role.findAndCountAll({ attributes: resultado_rol })
     .then((data) =>
       data
-        ? res.send({ message: "listado de roles encontrados", data: data })
+        ? res.send({
+            message: "listado de roles encontrados",
+            data: { cantidad: data.count, elementos: data.rows },
+          })
         : res.send({
             message: "no hay datos",
           })
@@ -45,10 +51,16 @@ export const list = (req, res) => {
 //devuelve un solo rol
 export const detail = (req, res) => {
   console.log("detalle de Role ", req.params);
-  Role.findByPk(req.params.id)
+  Role.findAndCountAll({
+    where: { uuid: req.params.id },
+    attributes: resultado_rol,
+  })
     .then((data) =>
       data
-        ? res.send({ message: "rol encontrado", data: data })
+        ? res.send({
+            message: "rol encontrado",
+            data: { cantidad: data.count, elementos: data.rows },
+          })
         : res.send({ message: "no hay datos" })
     )
     .catch((error) => {

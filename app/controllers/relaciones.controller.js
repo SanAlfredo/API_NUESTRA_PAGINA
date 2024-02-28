@@ -1,8 +1,8 @@
-import { where } from "sequelize";
 import Person from "../models/person.model.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
+//funcion para crear un usuario con todo y persona, enlazar todo internamente.
 export const create = (req, res) => {
   console.log("Create full User", req.body);
   const {
@@ -58,6 +58,7 @@ export const create = (req, res) => {
               // res.send({message:"registro exitoso",data:id})
               if (data) {
                 const id = data[0].id;
+                //definir el usuario a insertar
                 const userInsert = {
                   user: usuario,
                   password: bcrypt.hashSync(contrasenia, 8),
